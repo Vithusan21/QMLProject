@@ -2,9 +2,13 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import QMLProject
+
 Item {
     id: root
+
     required property StackView stack
+    required property var timer
 
     ColumnLayout {
         anchors.fill: parent
@@ -19,7 +23,6 @@ Item {
         }
 
         GridLayout {
-            id: grid
             columns: 5
             rowSpacing: 20
             columnSpacing: 20
@@ -35,7 +38,10 @@ Item {
 
                     onClicked: {
                         if (index === 0) {
-                            stack.push("Screen1.qml", { stack: stack })
+                            stack.push("Screen1.qml", {
+                                stack: stack,
+                                timer: timer
+                            })
                         }
                     }
                 }

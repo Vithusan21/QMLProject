@@ -3,20 +3,24 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import QMLProject
-
+import App 1.0
 
 ApplicationWindow {
     id: window
     visible: true
     title: "QMLProject"
 
-    // Fixed size requirement
     width: 1024
     height: 768
     minimumWidth: 1024
     maximumWidth: 1024
     minimumHeight: 768
     maximumHeight: 768
+
+    // Single backend instance shared by screens
+    TimerBackend {
+        id: timerBackend
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -37,6 +41,7 @@ ApplicationWindow {
 
             initialItem: MenuScreen {
                 stack: stackView
+                timer: timerBackend
             }
         }
     }

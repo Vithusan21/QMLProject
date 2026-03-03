@@ -4,9 +4,10 @@ import QtQuick.Layouts
 
 Item {
     id: root
-    required property StackView stack
 
-    // Tweaks for consistent mockup-like sizing
+    required property StackView stack
+    required property var timer
+
     readonly property int rowHeight: 44
     readonly property int labelWidth: 380
     readonly property int fieldWidth: 380
@@ -25,7 +26,6 @@ Item {
             horizontalAlignment: Text.AlignHCenter
         }
 
-        // Center the groupbox like the mockup
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -33,7 +33,6 @@ Item {
             GroupBox {
                 id: formBox
                 title: "GroupBox title"
-
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Math.min(parent.width, boxMaxWidth)
 
@@ -42,7 +41,6 @@ Item {
                     anchors.margins: 18
                     spacing: 14
 
-                    // Row 1: title1 + field1
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 18
@@ -59,15 +57,15 @@ Item {
 
                         TextField {
                             id: field1
-                            text: "0"
                             readOnly: true
+                            // Show seconds; timer updates every 0.5s
+                            text: timer ? timer.seconds.toFixed(1) : "0.0"
                             Layout.preferredWidth: fieldWidth
                             Layout.preferredHeight: rowHeight
                             horizontalAlignment: TextInput.AlignHCenter
                         }
                     }
 
-                    // Row 2: title2 + field2
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 18
@@ -91,7 +89,6 @@ Item {
                         }
                     }
 
-                    // Buttons (centered, stacked)
                     ColumnLayout {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter
@@ -101,12 +98,14 @@ Item {
                             id: btn1
                             text: "Btn1 (Button)"
                             checkable: true
+                            checked: timer ? timer.running : false
                             Layout.preferredWidth: buttonWidth
                             Layout.preferredHeight: rowHeight
 
                             onToggled: {
-                                // backend wiring later (Commit #5/#6)
-                                console.log("btn1 toggled:", checked)
+                                if (!timer) return
+                                if (checked) timer.start()
+                                else timer.pause()
                             }
                         }
 
@@ -117,14 +116,12 @@ Item {
                             Layout.preferredHeight: rowHeight
 
                             onClicked: {
-                                // temporary UI reset; backend wiring later
-                                field1.text = "0"
-                                console.log("btn2 clicked")
+                                if (!timer) return
+                                timer.reset()
                             }
                         }
                     }
 
-                    // Row 3: title4 + field4
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 18
