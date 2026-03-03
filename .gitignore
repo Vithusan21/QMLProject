@@ -1,0 +1,21 @@
+# Build output
+build/
+build-*/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.ninja
+*.ninja_deps
+*.ninja_log
+
+# Qt Creator / user files
+.qtcreator/
+*.user
+*.user.*
+*.autosave
+
+# OS
+Thumbs.db
+.DS_Store
