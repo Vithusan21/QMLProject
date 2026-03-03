@@ -16,6 +16,13 @@
 - `src/` : C++ backend and app entry point
 - `qml/` : QML UI (Main, screens, components)
 
+## Qt Modules Used
+
+- QtQuick
+- QtQuick.Controls
+- QtQuick.Layouts
+- QtQuick.Effects (for shadow rendering)
+
 ## Build & run (Qt Creator)
 1. Open `CMakeLists.txt` in Qt Creator
 2. Configure kit: Desktop Qt 6.10.2 MinGW 64-bit (or any Desktop Qt6 kit)
