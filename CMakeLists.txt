@@ -16,6 +16,8 @@ qt_add_qml_module(appQMLProject
     URI QMLProject
     QML_FILES
         qml/Main.qml
+        qml/components/TopMenuBar.qml
+        qml/screens/MenuScreen.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
