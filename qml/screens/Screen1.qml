@@ -1,148 +1,167 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Effects
+
+import QMLProject
 
 Item {
     id: root
-
     required property StackView stack
     required property var timer
 
-    readonly property int rowHeight: 44
-    readonly property int labelWidth: 380
-    readonly property int fieldWidth: 380
-    readonly property int buttonWidth: 320
-    readonly property int boxMaxWidth: 860
+    readonly property color bgColor: "#e0e5ec"
+    readonly property color sunkenColor: "#d1d9e6"
+    
+    Rectangle {
+        anchors.fill: parent
+        color: root.bgColor
+    }
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 24
-        spacing: 18
+        anchors.margins: 40
+        spacing: 30
 
-        Label {
-            text: "screen 1"
+        // Screen Title
+        Text {
+            text: "Timer Control"
             font.pixelSize: 28
-            Layout.fillWidth: true
-            horizontalAlignment: Text.AlignHCenter
+            font.bold: true
+            color: "#606a78"
+            Layout.alignment: Qt.AlignHCenter
         }
 
-        Item {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        // Main Form Container
+        GroupBox {
+            id: formBox
+            title: "GroupBox title"
 
-            GroupBox {
-                id: formBox
-                title: "GroupBox title"
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.min(parent.width, boxMaxWidth)
+            label: Label {
+                    text: formBox.title
+                    font.pixelSize: 16
+                    font.bold: true
+                    color: "#606a78"
+                    leftPadding: 12   // spacing before text
+                }
+
+
+            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredWidth: 800
+            Layout.preferredHeight: 400
+            
+            background: Rectangle {
+                color: root.bgColor
+                radius: 20
+
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    shadowEnabled: true
+                    shadowOpacity: 0.1
+                    shadowBlur: 1.0
+                    shadowHorizontalOffset: 5
+                    shadowVerticalOffset: 5
+                }
+            }
+
+            GridLayout {
+                anchors.fill: parent
+                anchors.margins: 30
+                columns: 2
+                rowSpacing: 25
+                columnSpacing: 40
+
+
+                Label { text: "title1 (Label)"; font.pixelSize: 16; color: "#606a78" }
+                
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 50
+                    radius: 10
+                    color: root.sunkenColor
+                    
+
+                    border.color: "#b8bec9"
+                    border.width: 1
+
+                    TextField {
+                        id: field1
+                        anchors.fill: parent
+                        anchors.margins: 2
+                        text: timer ? timer.seconds.toFixed(1) : "0.0"
+                        readOnly: true
+                        horizontalAlignment: TextInput.AlignHCenter
+                        verticalAlignment: TextInput.AlignVCenter
+                        font.pixelSize: 18
+                        background: null // Remove default styling
+                    }
+                }
+
+
+                Label { text: "title2 (Label)"; font.pixelSize: 16; color: "#606a78" }
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 50
+                    radius: 10
+                    color: root.sunkenColor
+                    border.color: "#b8bec9"
+
+                    TextField {
+                        anchors.fill: parent
+                        placeholderText: "Enter text..."
+                        horizontalAlignment: TextInput.AlignHCenter
+                        verticalAlignment: TextInput.AlignVCenter
+                        background: null
+                    }
+                }
+
 
                 ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 18
-                    spacing: 14
+                    Layout.columnSpan: 2
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 15
 
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 18
-
-                        Label {
-                            id: title1
-                            text: "title1 (Label)"
-                            Layout.preferredWidth: labelWidth
-                            Layout.preferredHeight: rowHeight
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            padding: 8
-                        }
-
-                        TextField {
-                            id: field1
-                            readOnly: true
-                            // Show seconds; timer updates every 0.5s
-                            text: timer ? timer.seconds.toFixed(1) : "0.0"
-                            Layout.preferredWidth: fieldWidth
-                            Layout.preferredHeight: rowHeight
-                            horizontalAlignment: TextInput.AlignHCenter
+                    // Btn1: Toggle
+                    Button {
+                        id: btn1
+                        text: checked ? "PAUSE" : "RUN"
+                        checkable: true
+                        checked: timer ? timer.running : false
+                        Layout.preferredWidth: 250
+                        Layout.preferredHeight: 50
+                        
+                        onToggled: {
+                            if (checked) timer.start()
+                            else timer.pause()
                         }
                     }
 
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 18
-
-                        Label {
-                            id: title2
-                            text: "title2 (Label)"
-                            Layout.preferredWidth: labelWidth
-                            Layout.preferredHeight: rowHeight
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            padding: 8
-                        }
-
-                        TextField {
-                            id: field2
-                            placeholderText: "Field2 (LineEdit)"
-                            Layout.preferredWidth: fieldWidth
-                            Layout.preferredHeight: rowHeight
-                            horizontalAlignment: TextInput.AlignHCenter
-                        }
+                    // Btn2: Reset
+                    Button {
+                        id: btn2
+                        text: "RESET"
+                        Layout.preferredWidth: 250
+                        Layout.preferredHeight: 50
+                        onClicked: timer.reset()
                     }
+                }
 
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter
-                        spacing: 12
+                // ROW 4: Final Labels
+                Label { text: "title4 (Label)"; font.pixelSize: 16; color: "#606a78" }
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 50
+                    radius: 10
+                    color: root.sunkenColor
+                    border.color: "#b8bec9"
 
-                        Button {
-                            id: btn1
-                            text: "Btn1 (Button)"
-                            checkable: true
-                            checked: timer ? timer.running : false
-                            Layout.preferredWidth: buttonWidth
-                            Layout.preferredHeight: rowHeight
-
-                            onToggled: {
-                                if (!timer) return
-                                if (checked) timer.start()
-                                else timer.pause()
-                            }
-                        }
-
-                        Button {
-                            id: btn2
-                            text: "Btn2 (Button)"
-                            Layout.preferredWidth: buttonWidth
-                            Layout.preferredHeight: rowHeight
-
-                            onClicked: {
-                                if (!timer) return
-                                timer.reset()
-                            }
-                        }
-                    }
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 18
-
-                        Label {
-                            id: title4
-                            text: "title4 (Label)"
-                            Layout.preferredWidth: labelWidth
-                            Layout.preferredHeight: rowHeight
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            padding: 8
-                        }
-
-                        TextField {
-                            id: field4
-                            placeholderText: "Field4 (LineEdit)"
-                            Layout.preferredWidth: fieldWidth
-                            Layout.preferredHeight: rowHeight
-                            horizontalAlignment: TextInput.AlignHCenter
-                        }
+                    TextField {
+                        anchors.fill: parent
+                        placeholderText: "Field4"
+                        horizontalAlignment: TextInput.AlignHCenter
+                        verticalAlignment: TextInput.AlignVCenter
+                        background: null
                     }
                 }
             }
